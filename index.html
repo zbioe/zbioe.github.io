@@ -1,0 +1,1136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Iury Fukuda · Platform Engineer</title>
+<meta name="description" content="Iury Jemes Fukuda Martins · Platform Engineer & Developer. Automation, system reproducibility, software monitoring." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>
+tailwind.config = {
+  darkMode: 'media',
+  theme: {
+    extend: {
+      fontFamily: {
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+      },
+      colors: {
+        // Gruvbox — driven by CSS variables so light/dark swap automatically
+        gv: {
+          bg0h:  'var(--gv-bg0h)',
+          bg:    'var(--gv-bg)',
+          bg1:   'var(--gv-bg1)',
+          bg2:   'var(--gv-bg2)',
+          bg3:   'var(--gv-bg3)',
+          bg4:   'var(--gv-bg4)',
+          fg:    'var(--gv-fg)',
+          fg1:   'var(--gv-fg1)',
+          fg2:   'var(--gv-fg2)',
+          fg3:   'var(--gv-fg3)',
+          gray:  'var(--gv-gray)',
+          red:   'var(--gv-red)',
+          green: 'var(--gv-green)',
+          yellow:'var(--gv-yellow)',
+          blue:  'var(--gv-blue)',
+          purple:'var(--gv-purple)',
+          aqua:  'var(--gv-aqua)',
+          orange:'var(--gv-orange)',
+        },
+      },
+    },
+  },
+};
+</script>
+
+<style>
+  /* Gruvbox DARK — default */
+  :root {
+    color-scheme: dark;
+    --gv-bg0h:  #1d2021;
+    --gv-bg:    #282828;
+    --gv-bg1:   #3c3836;
+    --gv-bg2:   #504945;
+    --gv-bg3:   #665c54;
+    --gv-bg4:   #7c6f64;
+    --gv-fg:    #ebdbb2;
+    --gv-fg1:   #d5c4a1;
+    --gv-fg2:   #bdae93;
+    --gv-fg3:   #a89984;
+    --gv-gray:  #928374;
+    --gv-red:   #fb4934;
+    --gv-green: #b8bb26;
+    --gv-yellow:#fabd2f;
+    --gv-blue:  #83a598;
+    --gv-purple:#d3869b;
+    --gv-aqua:  #8ec07c;
+    --gv-orange:#fe8019;
+    --grid-line:  rgba(235,219,178,0.035);
+    --card-hover: #32302f;
+    --selection-fg: #1d2021;
+  }
+
+  /* Gruvbox LIGHT — only when browser is explicitly set to light */
+  @media (prefers-color-scheme: light) {
+    :root {
+      color-scheme: light;
+      --gv-bg0h:  #f9f5d7;
+      --gv-bg:    #fbf1c7;
+      --gv-bg1:   #ebdbb2;
+      --gv-bg2:   #d5c4a1;
+      --gv-bg3:   #bdae93;
+      --gv-bg4:   #a89984;
+      --gv-fg:    #3c3836;
+      --gv-fg1:   #504945;
+      --gv-fg2:   #665c54;
+      --gv-fg3:   #7c6f64;
+      --gv-gray:  #928374;
+      --gv-red:   #9d0006;
+      --gv-green: #79740e;
+      --gv-yellow:#b57614;
+      --gv-blue:  #076678;
+      --gv-purple:#8f3f71;
+      --gv-aqua:  #427b58;
+      --gv-orange:#af3a03;
+      --grid-line:  rgba(60,56,54,0.05);
+      --card-hover: #f2e5bc;
+      --selection-fg: #fbf1c7;
+    }
+  }
+
+  html, body { background: var(--gv-bg0h); }
+  body {
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    color: var(--gv-fg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .font-mono, code, pre { font-family: "JetBrains Mono", ui-monospace, monospace; }
+
+  /* subtle grid background */
+  .bg-grid {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-position: -1px -1px;
+  }
+
+  .glow-yellow { box-shadow: 0 0 0 1px rgba(250,189,47,0.18), 0 12px 40px -16px rgba(250,189,47,0.35); }
+  .glow-aqua   { box-shadow: 0 0 0 1px rgba(142,192,124,0.18), 0 12px 40px -16px rgba(142,192,124,0.35); }
+
+  /* terminal blink */
+  @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+  .caret { display:inline-block; width:0.55ch; background: var(--gv-yellow); animation: blink 1.05s steps(1) infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .caret { animation: none; opacity: 0.85; }
+    .card { transition: none; }
+  }
+
+  /* link underline */
+  a.l-anim { position: relative; }
+  a.l-anim::after {
+    content:""; position:absolute; left:0; right:0; bottom:-2px; height:1px;
+    background: currentColor; transform: scaleX(0); transform-origin: left;
+    transition: transform .35s ease;
+  }
+  a.l-anim:hover::after { transform: scaleX(1); }
+
+  /* card hover */
+  .card { transition: transform .25s ease, border-color .25s ease, background-color .25s ease; }
+  .card:hover { transform: translateY(-2px); border-color: var(--gv-bg3); background-color: var(--card-hover); }
+
+  /* divider with arrow markers like gruvbox prompts */
+  .arrow::before { content:"❯ "; color: var(--gv-orange); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--gv-bg0h); }
+  ::-webkit-scrollbar-thumb { background: var(--gv-bg1); border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gv-bg2); }
+
+  /* selection */
+  ::selection { background: var(--gv-yellow); color: var(--selection-fg); }
+
+  /* pretty wrapping */
+  p, li { text-wrap: pretty; }
+  h1, h2, h3 { text-wrap: balance; }
+
+  /* smooth theme transition */
+  body, .card, header, section, aside, button, a {
+    transition: background-color .25s ease, color .25s ease, border-color .25s ease;
+  }
+</style>
+</head>
+
+<body class="min-h-screen">
+
+<a href="#top" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:px-3 focus:py-2 focus:rounded-md focus:bg-gv-yellow focus:text-gv-bg0h focus:font-mono focus:text-sm">skip to content</a>
+
+<!-- ============== TOP NAV ============== -->
+<header class="sticky top-0 z-40 backdrop-blur bg-gv-bg0h/85 border-b border-gv-bg1">
+  <nav class="max-w-6xl mx-auto px-5 sm:px-8 h-14 flex items-center justify-between">
+    <a href="#top" aria-label="zbioe — home" class="group flex items-center gap-2 text-gv-fg">
+      <span class="relative inline-flex items-center justify-center w-8 h-8 rounded-md bg-gv-bg text-gv-yellow border border-gv-bg2 transition-all duration-200 group-hover:border-gv-yellow group-hover:bg-gv-yellow group-hover:text-gv-bg0h group-hover:shadow-[0_0_24px_rgba(250,189,47,0.45)]">
+        <svg viewBox="0 0 24 24" class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+          <path d="M6 6 L18 6 L6 18 L18 18" />
+          <circle cx="20" cy="6" r="1.5" fill="currentColor" stroke="none" class="opacity-80" />
+        </svg>
+      </span>
+    </a>
+    <ul class="hidden md:flex items-center gap-7 text-sm font-mono text-gv-fg2">
+      <li><a class="l-anim hover:text-gv-yellow" href="#about">about</a></li>
+      <li><a class="l-anim hover:text-gv-yellow" href="#skills">skills</a></li>
+      <li><a class="l-anim hover:text-gv-yellow" href="#projects">projects</a></li>
+      <li><a class="l-anim hover:text-gv-yellow" href="#work">work</a></li>
+      <li>
+        <a href="#contact" class="group inline-flex items-baseline gap-0 hover:text-gv-yellow">
+          <span class="text-gv-orange group-hover:text-gv-yellow">./contact</span>
+        </a>
+      </li>
+    </ul>
+    <div class="hidden sm:flex items-center gap-2">
+      <a href="#export" aria-label="export CV" title="export $CV" class="inline-flex items-center justify-center w-8 h-8 font-mono text-xs rounded-md border border-gv-bg2 text-gv-aqua hover:text-gv-bg0h hover:bg-gv-aqua hover:border-gv-aqua transition">
+        ↓
+      </a>
+    </div>
+  </nav>
+</header>
+
+<main id="top" class="bg-grid">
+
+<!-- ============== HERO ============== -->
+<section class="max-w-6xl mx-auto px-5 sm:px-8 pt-14 sm:pt-20 pb-16 sm:pb-24">
+  <div class="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+
+    <!-- left: identity -->
+    <div class="lg:col-span-7">
+      <div class="font-mono text-xs sm:text-sm text-gv-gray mb-6 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <span class="text-gv-aqua">zbioe</span>
+        <span class="text-gv-gray">@</span>
+        <span class="text-gv-blue">nixos</span>
+        <span class="text-gv-gray">in</span>
+        <span class="text-gv-yellow">~/portfolio</span>
+        <span class="text-gv-gray">on</span>
+        <span class="text-gv-purple">main</span>
+        <span class="text-gv-gray">via</span>
+        <span class="text-gv-green">❄ nix-shell</span>
+        <span class="ml-auto text-gv-bg4 hidden sm:inline">took 26ms</span>
+        <span class="basis-full h-0"></span>
+        <span class="text-gv-red">❯</span>
+        <span class="text-gv-fg1">whoami</span>
+      </div>
+
+      <h1 class="font-mono font-semibold tracking-tight text-gv-fg leading-[1.05]
+                 text-[clamp(2.25rem,6.4vw,4.5rem)]">
+        Iury Jemes
+        <span class="block text-gv-yellow">Fukuda Martins</span>
+      </h1>
+
+      <div class="mt-5 font-mono text-sm sm:text-base text-gv-fg2 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <span class="text-gv-gray">&gt;</span>
+        <span class="text-gv-orange">role</span>
+        <span class="text-gv-gray">=</span>
+        <span class="text-gv-green">"Platform Engineer"</span>
+      </div>
+
+      <p class="mt-8 max-w-2xl text-base sm:text-lg leading-relaxed text-gv-fg1">
+        Strong passion for <span class="text-gv-yellow">automation</span>,
+        <span class="text-gv-aqua">system reproducibility</span>, and
+        <span class="text-gv-orange">software monitoring</span>.
+        Dedicated to understanding the operational environment in order to build resilient infrastructure.
+      </p>
+
+      <div class="mt-10 flex flex-wrap items-center gap-3">
+        <a href="#projects" class="group inline-flex items-center gap-2 font-mono text-sm px-4 py-2.5 rounded-md bg-gv-yellow text-gv-bg0h hover:bg-gv-orange transition">
+          <span>./view-projects</span>
+          <span class="transition-transform group-hover:translate-x-0.5">→</span>
+        </a>
+        <a href="#contact" class="group inline-flex items-center gap-2 font-mono text-sm px-4 py-2.5 rounded-md border border-gv-bg2 hover:border-gv-aqua transition">
+          <span class="text-gv-aqua">$</span>
+          <span class="text-gv-fg2 group-hover:text-gv-fg1 transition">mail</span>
+          <span class="text-gv-orange">-s</span>
+          <span class="text-gv-green">"hi"</span>
+          <span class="text-gv-fg1 group-hover:text-gv-aqua transition">i@zbioe.com</span>
+        </a>
+      </div>
+
+      <!-- quick links -->
+      <ul class="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 font-mono text-xs text-gv-fg2 max-w-2xl">
+        <li class="flex items-center gap-2">
+          <span class="text-gv-orange">↳</span>
+          <a class="l-anim hover:text-gv-yellow" href="https://github.com/zbioe" target="_blank" rel="noreferrer">github.com/zbioe</a>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="text-gv-orange">↳</span>
+          <a class="l-anim hover:text-gv-yellow" href="https://linkedin.com/in/iuryfukuda" target="_blank" rel="noreferrer">in/iuryfukuda</a>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="text-gv-orange">↳</span>
+          <a class="l-anim hover:text-gv-yellow" href="mailto:i@zbioe.com">i@zbioe.com</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- right: neofetch card -->
+    <div class="lg:col-span-5">
+      <div class="rounded-md border border-gv-bg1 bg-gv-bg shadow-[0_30px_80px_-40px_rgba(0,0,0,0.8)] overflow-hidden ring-2 ring-gv-yellow/40">
+        <!-- alacritty title bar -->
+        <div class="flex items-center px-3 py-1 border-b border-gv-bg1 bg-gv-bg0h font-mono text-[10.5px] text-gv-fg2">
+          <span class="text-gv-yellow">●</span>
+          <span class="ml-2 text-gv-aqua">alacritty</span>
+          <span class="ml-1.5 text-gv-gray">—</span>
+          <span class="ml-1.5">Tmux - main /home/zbioe</span>
+          <span class="ml-auto text-gv-gray hidden sm:inline">prefix: C-q</span>
+        </div>
+
+        <div class="p-5 sm:p-6 grid grid-cols-[auto,1fr] gap-x-5 sm:gap-x-6 items-start">
+          <div class="relative">
+            <div class="absolute -inset-1 rounded-full bg-gv-yellow/20 blur"></div>
+            <img
+              src="https://avatars.githubusercontent.com/u/7332055?v=4"
+              alt="Iury Fukuda avatar"
+              loading="lazy"
+              class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full ring-2 ring-gv-yellow/70 ring-offset-2 ring-offset-gv-bg object-cover"
+            />
+          </div>
+
+          <div class="font-mono text-[12.5px] sm:text-sm leading-[1.65]">
+            <div><span class="text-gv-yellow">zbioe</span><span class="text-gv-fg">@</span><span class="text-gv-aqua">nixos</span></div>
+            <div class="text-gv-gray border-b border-gv-bg1 pb-1 mb-1.5">─────────────</div>
+            <div><span class="text-gv-aqua">OS</span><span class="text-gv-gray">.....</span><span class="text-gv-fg1">NixOS / Linux</span></div>
+            <div><span class="text-gv-aqua">Role</span><span class="text-gv-gray">...</span><span class="text-gv-fg1">Platform Engineer</span></div>
+            <div><span class="text-gv-aqua">Loc</span><span class="text-gv-gray">....</span><span class="text-gv-fg1">Santa Catarina, BR</span></div>
+            <div><span class="text-gv-aqua">Shell</span><span class="text-gv-gray">..</span><span class="text-gv-fg1">fish</span></div>
+            <div><span class="text-gv-aqua">Theme</span><span class="text-gv-gray">..</span><span class="text-gv-fg1">gruvbox-dark</span></div>
+            <div><span class="text-gv-aqua">Status</span><span class="text-gv-gray">.</span><span class="text-gv-green">available</span></div>
+
+            <!-- gruvbox palette swatch -->
+            <div class="mt-3 flex gap-1.5">
+              <span class="w-4 h-4 rounded-sm bg-gv-bg1"></span>
+              <span class="w-4 h-4 rounded-sm bg-gv-red"></span>
+              <span class="w-4 h-4 rounded-sm bg-gv-green"></span>
+              <span class="w-4 h-4 rounded-sm bg-gv-yellow"></span>
+              <span class="w-4 h-4 rounded-sm bg-gv-blue"></span>
+              <span class="w-4 h-4 rounded-sm bg-gv-purple"></span>
+              <span class="w-4 h-4 rounded-sm bg-gv-aqua"></span>
+              <span class="w-4 h-4 rounded-sm bg-gv-fg2"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- prompt -->
+        <div class="px-5 sm:px-6 pb-3 font-mono text-[12.5px] sm:text-sm text-gv-fg2">
+          <span class="text-gv-aqua">$</span>
+          <span class="text-gv-fg1"> echo "let's build something resilient"</span>
+          <span class="caret align-baseline ml-1">&nbsp;</span>
+        </div>
+
+        <!-- tmux status bar (minimal — black bg, white fg, host on right) -->
+        <div class="flex items-center font-mono text-[11px] leading-none px-2 py-1.5 bg-gv-bg0h text-gv-fg2 border-t border-gv-bg1">
+          <span class="text-gv-fg2">[</span><span class="text-gv-yellow">nixos</span><span class="text-gv-fg2">]</span>
+          <span class="ml-3 text-gv-fg">1:fish<span class="text-gv-yellow">*</span></span>
+          <span class="ml-3 text-gv-gray">2:nvim<span class="text-gv-fg2">-</span></span>
+          <span class="ml-3 text-gv-gray">3:lazygit<span class="text-gv-fg2">-</span></span>
+          <span class="ml-auto text-gv-fg">nixos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ABOUT ============== -->
+<section id="about" class="border-t border-gv-bg1 bg-gv-bg0h/40">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-24">
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-14">
+      <header class="lg:col-span-4">
+        <div class="font-mono text-xs text-gv-gray mb-2"># 01</div>
+        <h2 class="font-mono text-2xl sm:text-3xl text-gv-fg">
+          <span class="text-gv-green">//</span> about
+        </h2>
+        <p class="mt-3 font-mono text-xs text-gv-gray">a brief description</p>
+      </header>
+
+      <div class="lg:col-span-8 max-w-3xl">
+        <p class="text-lg sm:text-xl leading-relaxed text-gv-fg1">
+          I started out in <span class="text-gv-aqua">Linux support</span> and
+          <span class="text-gv-aqua">sysadmin</span> work, then moved into
+          <span class="text-gv-yellow">software development</span>,
+          and eventually landed where the two meet. Today I build the
+          <span class="text-gv-orange">platforms and pipelines</span>
+          other engineers depend on. That background means I&rsquo;m as comfortable
+          tracing a packet through a misbehaving cluster as I am writing the
+          Go service that runs on it, or designing the Terraform module that
+          spins up the whole thing.
+        </p>
+        <p class="mt-6 text-base sm:text-lg leading-relaxed text-gv-fg2">
+          Lately I&rsquo;ve been working on the edge between platform engineering and
+          AI, helping evaluate how language models reason about
+          real infrastructure problems. Outside of work, I keep shipping
+          reproducible, observable systems that I&rsquo;d be proud to hand to any team.
+        </p>
+
+        <ul class="mt-10 grid sm:grid-cols-2 gap-x-8 gap-y-4 font-mono text-sm">
+          <li class="flex items-start gap-3"><span class="text-gv-yellow mt-0.5">▸</span><span class="text-gv-fg1">Problem Decomposition</span></li>
+          <li class="flex items-start gap-3"><span class="text-gv-yellow mt-0.5">▸</span><span class="text-gv-fg1">Reproducible Systems</span></li>
+          <li class="flex items-start gap-3"><span class="text-gv-yellow mt-0.5">▸</span><span class="text-gv-fg1">Production Monitoring</span></li>
+          <li class="flex items-start gap-3"><span class="text-gv-yellow mt-0.5">▸</span><span class="text-gv-fg1">Root-cause Debugging</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== SKILLS ============== -->
+<section id="skills" class="border-t border-gv-bg1">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-24">
+
+    <header class="mb-12 sm:mb-16 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+      <div>
+        <div class="font-mono text-xs text-gv-gray mb-2"># 02</div>
+        <h2 class="font-mono text-2xl sm:text-3xl text-gv-fg">
+          <span class="text-gv-green">//</span> technical skills
+        </h2>
+      </div>
+      <p class="font-mono text-xs">
+        <span class="text-gv-aqua">$</span>
+        <span class="text-gv-fg2">which</span>
+        <span class="text-gv-orange">-a</span>
+        <span class="text-gv-purple">${tools[@]}</span>
+        <span class="text-gv-bg4 ml-3"># the stack I&rsquo;ve been running in production</span>
+      </p>
+    </header>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+      <!-- card -->
+      <article class="card rounded-xl border border-gv-bg1 bg-gv-bg p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-gv-yellow font-mono text-sm">[ 01 ]</span>
+          <h3 class="font-mono text-sm text-gv-yellow">Cloud &amp; Infrastructure</h3>
+        </div>
+        <ul class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">AWS</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Azure</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">GCP</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">OCI</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Terraform</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Ansible</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Consul</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Vault</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Colmena</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Nomad</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">GitHub Actions</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">TeamCity</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Rundeck</li>
+        </ul>
+      </article>
+
+      <article class="card rounded-xl border border-gv-bg1 bg-gv-bg p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-gv-aqua font-mono text-sm">[ 02 ]</span>
+          <h3 class="font-mono text-sm text-gv-aqua">Containers &amp; Orchestration</h3>
+        </div>
+        <ul class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Docker</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Kubernetes</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">docker-compose</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">k3s</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">distrobox</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">libvirt</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">KVM</li>
+        </ul>
+      </article>
+
+      <article class="card rounded-xl border border-gv-bg1 bg-gv-bg p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-gv-orange font-mono text-sm">[ 03 ]</span>
+          <h3 class="font-mono text-sm text-gv-orange">OS &amp; Administration</h3>
+        </div>
+        <ul class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Linux</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">NixOS</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Alpine</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Debian</li>
+        </ul>
+      </article>
+
+      <article class="card rounded-xl border border-gv-bg1 bg-gv-bg p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-gv-green font-mono text-sm">[ 04 ]</span>
+          <h3 class="font-mono text-sm text-gv-green">Programming</h3>
+        </div>
+        <ul class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Bash</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Nix</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Python</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Go</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Elixir</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Lisp</li>
+        </ul>
+      </article>
+
+      <article class="card rounded-xl border border-gv-bg1 bg-gv-bg p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-gv-purple font-mono text-sm">[ 05 ]</span>
+          <h3 class="font-mono text-sm text-gv-purple">Monitoring &amp; Logging</h3>
+        </div>
+        <ul class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Grafana</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Prometheus</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Loki</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Elastic Stack</li>
+        </ul>
+      </article>
+
+      <article class="card rounded-xl border border-gv-bg1 bg-gv-bg p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-gv-red font-mono text-sm">[ 06 ]</span>
+          <h3 class="font-mono text-sm text-gv-red">AI / ML</h3>
+        </div>
+        <ul class="flex flex-wrap gap-1.5 font-mono text-xs">
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">AI Evaluation</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">LLM Agent Benchmarking</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Harbor Framework</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">Horizon Framework</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">APEX Framework</li>
+          <li class="px-2 py-1 rounded border border-gv-bg2 text-gv-fg1">RLHF</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PROJECTS ============== -->
+<section id="projects" class="border-t border-gv-bg1 bg-gv-bg0h/40">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-24">
+
+    <header class="mb-12 sm:mb-16 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+      <div>
+        <div class="font-mono text-xs text-gv-gray mb-2"># 03</div>
+        <h2 class="font-mono text-2xl sm:text-3xl text-gv-fg">
+          <span class="text-gv-green">//</span> public projects
+        </h2>
+      </div>
+      <a href="https://github.com/zbioe" target="_blank" rel="noreferrer"
+         class="font-mono text-xs text-gv-fg2 hover:text-gv-yellow l-anim self-start sm:self-auto">
+        view all on github →
+      </a>
+    </header>
+
+    <div class="grid md:grid-cols-2 gap-4 sm:gap-5">
+
+      <!-- mongodb -->
+      <a href="https://github.com/zbioe/mongodb" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/cloud/clusters</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">MongoDB cluster deploy</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed">Example MongoDB cluster deployment on Azure or local libvirt, with XFS data on LVM.</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Separate data and log partitions; XFS on the data partition supports production-grade snapshots for backup.</li>
+          <li class="arrow">Includes a CLI to manage the deployment lifecycle.</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">MongoDB</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Azure</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">libvirt</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">LVM</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">XFS</span>
+        </div>
+      </a>
+
+      <!-- infra-consul -->
+      <a href="https://github.com/zbioe/infra-consul" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/cloud/mesh</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">Infra Consul</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed italic">Consul provisioned on NixOS VMs across GCP, Azure, and libvirtd.</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Terraform integrated with NixOS.</li>
+          <li class="arrow">HashiCorp Consul integrated with Vault for TLS.</li>
+          <li class="arrow">Multi-cloud federation and service mesh via Consul.</li>
+          <li class="arrow">Kubernetes in development environments using k3s.</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Terraform</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">NixOS</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Consul</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Vault</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">k3s</span>
+        </div>
+      </a>
+
+      <!-- observability -->
+      <a href="https://github.com/zbioe/observability" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/observability</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">Observability Playground</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed italic">Playground for running the Grafana observability stack locally with docker-compose.</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Grafana, Prometheus, Loki, Node Exporter, Alloy, and Flog.</li>
+          <li class="arrow">Flog instances configurable via environment variables.</li>
+          <li class="arrow">Automated dashboard and datasource provisioning.</li>
+          <li class="arrow">Automated custom-logo replacement.</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Grafana</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Prometheus</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Loki</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">docker-compose</span>
+        </div>
+      </a>
+
+      <!-- dotnix -->
+      <a href="https://github.com/zbioe/dotnix" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/.config</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">Dotnix</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed italic">NixOS configuration for workstation replication.</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Features Flakes support, modular config files, and custom ISO generation for rapid deployment.</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">NixOS</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Flakes</span>
+        </div>
+      </a>
+
+      <!-- nixpkgs PR -->
+      <a href="https://github.com/NixOS/nixpkgs/pull/145166" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">NixOS/nixpkgs · PR #145166</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">Nixpkgs Contribution</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed">
+          Merged pull request adding the
+          <code class="text-gv-fg px-1 py-0.5 rounded bg-gv-bg1/60 border border-gv-bg2 font-mono text-[12px]">uptime-kuma</code> package to the official Nixpkgs repository.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-green/40 text-gv-green">merged</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">open-source</span>
+        </div>
+      </a>
+
+      <!-- tf-ws -->
+      <a href="https://github.com/zbioe/tf-ws" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/cloud/gcp</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">Terraform Nginx with logs on GCS</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed">Example Terraform project that provisions an Nginx VM with logs shipped to GCS.</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Nginx with self-signed HTTPS and automated log storage in Google Cloud Storage.</li>
+          <li class="arrow">Automated health checks (check.tf).</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Terraform</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">GCP</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Nginx</span>
+        </div>
+      </a>
+
+      <!-- imdb -->
+      <a href="https://github.com/zbioe/imdb" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/go/scrapers</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">IMDB scraping</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed">Example of IMDb HTML scraping in Go.</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Parses name, episode, year, genres, and rating.</li>
+          <li class="arrow">Includes tests and benchmarks.</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Go</span>
+        </div>
+      </a>
+
+      <!-- grapnel -->
+      <a href="https://github.com/zbioe/grapnel" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/go/tools</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">Grapnel</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed">
+          A small Go CLI that strips HTML down to plain text or unique words. Handy for
+          feeding web crawlers and indexing page context.
+        </p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Usable as a CLI tool.</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Go</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">CLI</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">HTML parsing</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">web crawling</span>
+        </div>
+      </a>
+
+      <!-- ktfy -->
+      <a href="https://github.com/zbioe/kyfy" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/k8s/utils</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">KTFY</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed">Kubernetes backup and restore.</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Generates a tar.gz of the selected YAML manifests for backup and restore.</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Kubernetes</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">YAML</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">backup</span>
+        </div>
+      </a>
+
+      <!-- tomato -->
+      <a href="https://github.com/zbioe/tomato" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/cli</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">Tomato</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed">A simple pomodoro CLI that integrates with your OS.</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Notifies via notify-send and beeps via speaker-test.</li>
+          <li class="arrow">Configurable through custom parameters.</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">CLI</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Linux</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">notify-send</span>
+        </div>
+      </a>
+
+      <!-- auction -->
+      <a href="https://github.com/zbioe/auction" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/go/api</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">Auction</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed">A Go API, built with the standard library, for managing auction offer prices.</p>
+        <ul class="mt-4 space-y-1.5 text-sm text-gv-fg2">
+          <li class="arrow">Pure Go, no external libraries.</li>
+          <li class="arrow">Custom in-memory database.</li>
+        </ul>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Go</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">stdlib</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">REST</span>
+        </div>
+      </a>
+
+      <!-- sniff pods -->
+      <a href="https://github.com/zbioe/sniffAllPods" target="_blank" rel="noreferrer"
+         class="card group rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 flex flex-col">
+        <div class="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <div class="font-mono text-[11px] text-gv-gray mb-1">~/k8s/debug</div>
+            <h3 class="font-mono text-lg text-gv-yellow group-hover:text-gv-orange transition">Sniff k8s pods concurrently</h3>
+          </div>
+          <span class="font-mono text-gv-gray group-hover:text-gv-yellow transition">↗</span>
+        </div>
+        <p class="text-sm text-gv-fg1 leading-relaxed">A simple way to run tcpdump concurrently across all k8s pods, storing the PIDs and generating the logs.</p>
+        <div class="mt-5 flex flex-wrap gap-1.5 font-mono text-[11px]">
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Kubernetes</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">tcpdump</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">Bash</span>
+          <span class="px-2 py-0.5 rounded border border-gv-bg2 text-gv-fg2">concurrency</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============== WORK HISTORY ============== -->
+<section id="work" class="border-t border-gv-bg1">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-24">
+
+    <header class="mb-12 sm:mb-16">
+      <div class="font-mono text-xs text-gv-gray mb-2"># 04</div>
+      <h2 class="font-mono text-2xl sm:text-3xl text-gv-fg">
+        <span class="text-gv-green">//</span> work history
+      </h2>
+      <p class="font-mono text-xs text-gv-gray mt-2">$ git log --all --reverse</p>
+    </header>
+
+    <ol class="relative">
+      <!-- vertical line -->
+      <div class="absolute left-3 sm:left-4 top-2 bottom-2 w-px bg-gv-bg1" aria-hidden="true"></div>
+
+      <!-- Job template repeated -->
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-yellow ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">BellSpoke</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">AI Evaluation Engineer (Platform SME)</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">03/2026 — current · Santa Clara, CA · Remote</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Create and curate benchmarks for training and evaluating Large Language Models (LLMs) on Platform Engineering, SRE, DevOps, and Cloud Ops tasks.</li>
+          <li class="arrow">Technical RLHF (Reinforcement Learning from Human Feedback) and grading: evaluating and correcting model outputs for infrastructure tasks, ensuring generated solutions follow best practices for security, performance, and resilience.</li>
+          <li class="arrow">Edge-case research: identifying gaps in the technical knowledge of language models across specific domains.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-aqua ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">Bornlogic</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">DevOps</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">03/2020 — 02/2026 · Curitiba, PR · Remote</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Monitored production software using Grafana, Prometheus, and Loki for real-time observability.</li>
+          <li class="arrow">Implemented and maintained infrastructure automation using NixOS, Shell, Terraform, and Ansible.</li>
+          <li class="arrow">Managed and sustained application availability across Kubernetes clusters.</li>
+          <li class="arrow">Ensured data integrity by managing backups for all databases (Postgres, Neo4j, Elasticsearch, MongoDB) and S3 buckets, including automated recovery procedures.</li>
+          <li class="arrow">Collaborated with developers on the design and implementation of new projects, provisioning the required resources.</li>
+          <li class="arrow">Integrated development workflows with CI/CD pipelines using GitHub Actions.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-orange ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">Stratum.hk</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">API Developer</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">08/2019 — 09/2019 · Florianópolis, SC</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Maintained a Go-based API for interacting with the stratumBlue cryptocurrency investment fund.</li>
+          <li class="arrow">Implemented Dockerfiles and unit tests for legacy services to improve containerization and reliability.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-green ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">Everis</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">IT automation</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">04/2019 — 05/2019 · São Paulo, SP</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Developed custom automation scripts to address internal banking (Santander) infrastructure needs.</li>
+          <li class="arrow">Used Rundeck, Shell, and Chef to orchestrate operational tasks.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-purple ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">Neoway</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">Software Developer</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">06/2017 — 02/2019 · Florianópolis, SC</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Created, integrated, and maintained data extractors.</li>
+          <li class="arrow">Maintained Go APIs for auxiliary services, including Captcha solving and Proxy management.</li>
+          <li class="arrow">Standardized documentation and testing environments using containers to ensure development consistency across machines.</li>
+          <li class="arrow">Used docker-compose for local testing and RabbitMQ for asynchronous data transfer between teams.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-blue ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">Hostgator</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">Linux Support</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">01/2017 — 05/2019 · Florianópolis, SC</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Resolved security vulnerabilities, handled Terms of Service (TOS) reports, and performed site migrations and database recovery.</li>
+          <li class="arrow">Assisted clients with installation and configuration of services such as cPanel, e-mail servers, and proxies.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-orange ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">Hydra Systems</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">Sysadmin</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">06/2015 — 01/2017 · Florianópolis, SC</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Managed production servers for gambling systems, ensuring high availability and physical security.</li>
+          <li class="arrow">Developed encrypted ISO installation methods to prevent unauthorized software copying.</li>
+          <li class="arrow">Maintained an internal test lab to accurately simulate production environments.</li>
+          <li class="arrow">Monitored the local OpenStack infrastructure and automated builds and deployments using TeamCity.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-aqua ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">OSI Web Services</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">Developer · Freelancer</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">04/2016 — 06/2017 · Florianópolis, SC</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Developed a Python/WX-based management program for Raspberry Pi-controlled LED panels, featuring remote reboot and URL management capabilities.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-fg3 ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">College Monitor</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">Helper · Temporary</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">03/2015 — 11/2015 · Florianópolis, SC</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Assisted students with logic and programming-related questions and assignments.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14 pb-10">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-fg3 ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">Kloud TI</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">IT Support · Internship</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">10/2014 — 03/2015 · Palhoça, SC</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Provided general IT support for hardware and the remote “Full Auto” systems at gas stations.</li>
+          <li class="arrow">Developed a local script manager using Java and JavaFX to streamline server maintenance.</li>
+        </ul>
+      </li>
+
+      <li class="relative pl-10 sm:pl-14">
+        <span class="absolute left-2 sm:left-3 top-2 w-3 h-3 rounded-full bg-gv-fg3 ring-4 ring-gv-bg0h"></span>
+        <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-2">
+          <h3 class="font-mono text-base sm:text-lg text-gv-fg">
+            <span class="text-gv-yellow">Policlínica São Lucas</span>
+            <span class="text-gv-gray"> — </span>
+            <span class="text-gv-fg1">HelpDesk · Internship</span>
+          </h3>
+          <span class="font-mono text-xs text-gv-gray sm:text-right whitespace-nowrap">03/2014 — 08/2014 · Palhoça, SC</span>
+        </div>
+        <ul class="space-y-1.5 text-sm text-gv-fg2 max-w-3xl">
+          <li class="arrow">Provided general IT support for a medical clinic.</li>
+          <li class="arrow">Maintained the local Linux servers.</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============== CONTACT ============== -->
+<section id="contact" class="border-t border-gv-bg1 bg-gv-bg0h/40">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-28">
+
+    <div class="grid lg:grid-cols-12 gap-10 items-start">
+      <div class="lg:col-span-7">
+        <div class="font-mono text-xs text-gv-gray mb-2"># 05</div>
+        <h2 class="font-mono text-3xl sm:text-5xl text-gv-fg leading-[1.05]">
+          <span class="text-gv-green">$</span> mail <span class="text-gv-yellow">--to=you</span>
+        </h2>
+        <p class="mt-6 text-base sm:text-lg text-gv-fg1 max-w-xl leading-relaxed">
+          Always happy to chat about infrastructure, automation, observability,
+          or interesting problems at the intersection of platform engineering and AI.
+          Drop me an email and I&rsquo;ll get back to you.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="mailto:i@zbioe.com"
+             class="inline-flex items-center gap-2 font-mono text-sm px-5 py-3 rounded-md bg-gv-yellow text-gv-bg0h hover:bg-gv-orange transition glow-yellow">
+            <span>i@zbioe.com</span>
+            <span>↗</span>
+          </a>
+          <a href="https://github.com/zbioe" target="_blank" rel="noreferrer"
+             class="inline-flex items-center gap-2 font-mono text-sm px-5 py-3 rounded-md border border-gv-bg2 text-gv-fg1 hover:border-gv-aqua hover:text-gv-aqua transition">
+            github.com/zbioe
+          </a>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-5 rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7 font-mono text-sm">
+        <div class="text-gv-gray text-xs mb-3">~/contact.toml</div>
+        <pre class="leading-7 text-gv-fg1 whitespace-pre-wrap"><span class="text-gv-purple">[contact]</span>
+<span class="text-gv-aqua">name</span>     = <span class="text-gv-green">"Iury Jemes Fukuda Martins"</span>
+<span class="text-gv-aqua">email</span>    = <span class="text-gv-green">"i@zbioe.com"</span>
+<span class="text-gv-aqua">location</span> = <span class="text-gv-green">"Santa Catarina, Brazil"</span>
+
+<span class="text-gv-purple">[links]</span>
+<span class="text-gv-aqua">github</span>   = <span class="text-gv-green">"github.com/zbioe"</span>
+<span class="text-gv-aqua">linkedin</span> = <span class="text-gv-green">"linkedin.com/in/iuryfukuda"</span></pre>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============== EXPORT ============== -->
+<section id="export" class="border-t border-gv-bg1 bg-gv-bg0h/40">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-20 sm:py-24">
+
+    <header class="mb-10 sm:mb-14">
+      <div class="font-mono text-xs text-gv-gray mb-2"># 06</div>
+      <h2 class="font-mono text-2xl sm:text-3xl text-gv-fg">
+        <span class="text-gv-green">//</span> export
+      </h2>
+      <p class="font-mono text-xs mt-2 break-all sm:break-normal">
+        <span class="text-gv-aqua">$</span>
+        <span class="text-gv-fg2">make</span>
+        <span class="text-gv-green">resume.{pdf,md,org}</span>
+        <span class="text-gv-green">cv.{pdf,md,org}</span>
+        <span class="text-gv-bg4 ml-3"># build the offline copies below</span>
+      </p>
+    </header>
+
+    <div class="grid md:grid-cols-2 gap-5">
+
+      <article class="rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7">
+        <div class="flex items-baseline justify-between gap-3 mb-2 flex-wrap">
+          <h3 class="font-mono text-lg text-gv-yellow">resume</h3>
+          <span class="font-mono text-[11px] text-gv-gray">~/exports/resume.&lt;ext&gt;</span>
+        </div>
+        <p class="text-sm text-gv-fg2 leading-relaxed mb-5">
+          A concise one-pager: summary, core competencies, skills, recent experience, selected projects.
+        </p>
+        <div class="flex flex-wrap gap-2 font-mono text-sm">
+          <button data-export="resume:pdf" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-gv-yellow text-gv-bg0h hover:bg-gv-orange transition">
+            <span class="text-gv-bg0h/70">↓</span> .pdf
+          </button>
+          <button data-export="resume:md" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-md border border-gv-bg2 text-gv-fg1 hover:border-gv-aqua hover:text-gv-aqua transition">
+            <span class="text-gv-aqua">↓</span> .md
+          </button>
+          <button data-export="resume:org" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-md border border-gv-bg2 text-gv-fg1 hover:border-gv-purple hover:text-gv-purple transition">
+            <span class="text-gv-purple">↓</span> .org
+          </button>
+        </div>
+      </article>
+
+      <article class="rounded-xl border border-gv-bg1 bg-gv-bg p-6 sm:p-7">
+        <div class="flex items-baseline justify-between gap-3 mb-2 flex-wrap">
+          <h3 class="font-mono text-lg text-gv-orange">full CV</h3>
+          <span class="font-mono text-[11px] text-gv-gray">~/exports/CV.&lt;ext&gt;</span>
+        </div>
+        <p class="text-sm text-gv-fg2 leading-relaxed mb-5">
+          The complete record: every role, every public project, full skill matrix.
+        </p>
+        <div class="flex flex-wrap gap-2 font-mono text-sm">
+          <button data-export="cv:pdf" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-md bg-gv-orange text-gv-bg0h hover:bg-gv-yellow transition">
+            <span class="text-gv-bg0h/70">↓</span> .pdf
+          </button>
+          <button data-export="cv:md" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-md border border-gv-bg2 text-gv-fg1 hover:border-gv-aqua hover:text-gv-aqua transition">
+            <span class="text-gv-aqua">↓</span> .md
+          </button>
+          <button data-export="cv:org" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-md border border-gv-bg2 text-gv-fg1 hover:border-gv-purple hover:text-gv-purple transition">
+            <span class="text-gv-purple">↓</span> .org
+          </button>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============== FOOTER ============== -->
+<footer class="border-t border-gv-bg1 bg-gv-bg0h">
+  <div class="max-w-6xl mx-auto px-5 sm:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs text-gv-gray">
+    <div>
+      <span class="text-gv-orange">~$</span>
+      <span class="text-gv-fg2"> exit 0</span>
+      <span class="caret align-baseline ml-1">&nbsp;</span>
+    </div>
+    <div class="flex items-center gap-5">
+      <a href="https://github.com/zbioe" target="_blank" rel="noreferrer" class="hover:text-gv-yellow l-anim">github</a>
+      <a href="https://linkedin.com/in/iuryfukuda" target="_blank" rel="noreferrer" class="hover:text-gv-yellow l-anim">linkedin</a>
+      <a href="mailto:i@zbioe.com" class="hover:text-gv-yellow l-anim">email</a>
+    </div>
+    <div class="text-gv-bg4">
+      <span class="text-gv-gray">#</span> <span class="text-gv-fg3">Iury Fukuda</span> <span class="text-gv-gray">&lt;</span><span class="text-gv-aqua">@zbioe</span><span class="text-gv-gray">&gt;</span> <span class="text-gv-gray">&middot;</span> &copy; 2026
+    </div>
+  </div>
+</footer>
+
+<style>html { scroll-behavior: smooth; }</style>
+<script src="export.js" defer></script>
+
+
+</body>
+</html>
