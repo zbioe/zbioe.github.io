@@ -1194,6 +1194,37 @@ tailwind.config = {
   var btnMobile = document.getElementById('theme-toggle-mobile');
   if (btnMobile) btnMobile.addEventListener('click', toggleTheme);
 
+  // Recolor the favicon to follow the in-page theme (data-theme attr).
+  var faviconLink = document.querySelector('link[rel="icon"]');
+  if (faviconLink) {
+    var svgText = null;
+    var urlCache = {};
+    var THEME_COLORS = { dark: '#fabd2f', light: '#b57614' };
+
+    function applyFavicon() {
+      var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+      var color = THEME_COLORS[theme] || THEME_COLORS.dark;
+      if (urlCache[color]) { faviconLink.href = urlCache[color]; return; }
+      if (!svgText) {
+        fetch('logo.svg').then(function (r) { return r.text(); }).then(function (text) {
+          svgText = text;
+          applyFavicon();
+        }).catch(function () {});
+        return;
+      }
+      var modified = svgText.replace(/path\s*\{\s*fill:\s*#[0-9a-fA-F]+;?\s*\}/g,
+                                    'path { fill: ' + color + '; }');
+      var blob = new Blob([modified], { type: 'image/svg+xml' });
+      urlCache[color] = URL.createObjectURL(blob);
+      faviconLink.href = urlCache[color];
+    }
+
+    applyFavicon();
+    new MutationObserver(applyFavicon).observe(document.documentElement, {
+      attributes: true, attributeFilter: ['data-theme']
+    });
+  }
+
   // follow OS changes only if user hasn't explicitly toggled
   var mq = window.matchMedia('(prefers-color-scheme: light)');
   var listener = function (e) {
